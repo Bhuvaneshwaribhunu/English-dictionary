@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dictionary-app</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+
+
+    <h1>dictionary- app</h1>
+    <div class="input-box">
+    <input class="input"id="input" placeholder="type a word">
+    <button class="button" id="button"> search</button>
+    <p class="p-text" id="p-text">please enter a word and press search button</p>
+    </div>
+</div>  
+</body>
+<script>
+    const inputField = document.getElementById('input');
+    const paragraph = document.getElementById('p-text');
+
+    const searchButton = document.getElementById('button');
+
+    searchButton.addEventListener('click', function() {
+        const inputValue = inputField.value;
+
+        fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${inputValue}`)
+            .then(response => response.json())
+            .then(data => {
+                if(data.length > 0) {
+                    const partOfSpeech = data[0].meanings[0].partOfSpeech;
+                    const meaning = data[0].meanings[0].definitions[0].definition;
+                    paragraph.innerHTML = `<p><strong>Part of Speech:</strong> ${partOfSpeech}</p>
+                                            <p><strong>Meaning:</strong> ${meaning}</p>`;
+                } else {
+                    paragraph.textContent = 'No definition found.';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                paragraph.textContent = 'An error occurred while fetching the data. Please try again later.'; // Error handling
+            });
+    });
+</script>
+
+
+
+
+    
+</body>
+</html>
+
